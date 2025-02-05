@@ -12,6 +12,7 @@ import { ColumnMenuModule,ColumnsToolPanelModule,PivotModule} from "ag-grid-ente
 import { TextEditorModule } from 'ag-grid-community';
 import { NumberEditorModule } from 'ag-grid-community';
 import { PaginationModule } from 'ag-grid-community';
+import { json } from 'node:stream/consumers';
 
 
 ModuleRegistry.registerModules([
@@ -51,7 +52,7 @@ export class AppComponent implements OnInit{
   ];
 
   colDefs: ColDef[]=[
-    {field:"id", headerName: "Id", filter: true, checkboxSelection: true, editable: true, enableRowGroup: true, enablePivot: true,},
+    {field:"id", headerName: "Id", filter: true, checkboxSelection: true, editable: true, enableRowGroup: true, enablePivot: true, cellRenderer: true},
     {field: "ruleName", headerName: "Rule Name", filter: true, editable: true},
     {field: "active", headerName: "Is Active", filter: true, editable: true},
     {field: "type",headerName: "Type", filter: true, editable: true},
@@ -73,18 +74,28 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     console.log('it is working')
     this.isBrowser = isPlatformBrowser(this.platformId);
+
+    if (this.isBrowser) {
+      const storedData = localStorage.getItem('rowData');
+      if (storedData) {
+        this.rowData = JSON.parse(storedData);
+        console.log('Loaded from localStorage:', this.rowData);
+      }
+    }
   }
-  
+
   onSave(){
+    
     if(this.isEditMode){
       console.log('Data updated:', this.rowData)
     }else{
       console.log('Data Saved:', this.rowData)
+      localStorage.setItem('rowData', JSON.stringify(this.rowData))
     }
+
     this.isEditMode = !this.isEditMode;
   }
   
-
   onGridReady(event: any): void {
     this.gridApi = event.api;
     this.gridColumnApi = event.columnApi;
