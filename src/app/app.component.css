@@ -1,0 +1,50 @@
+/* Container for ag-Grid */
+div {
+    max-width: 100%;
+    display: flex;
+    justify-content: center; 
+    padding: 10px;
+  }
+  
+  /* Styling for the ag-Grid table */
+  ag-grid-angular {
+    width: 100%; 
+    border: 1px solid #0c24db;
+    border-radius: 8px; 
+    height: 500px;
+  }
+
+  button {
+    background-color: #3974b3;
+    color: white;              
+    border: none;              
+    border-radius: 4px;       
+    padding: 10px 20px;        
+    font-size: 16px;           
+
+  }
+   
+  
+ 
+  
+  
+
+  
+ 
+  
+  
+  
+  
+ 
+  
+  
+  
+  
+  
+
+  
+  
+  
+  
+  
+  
