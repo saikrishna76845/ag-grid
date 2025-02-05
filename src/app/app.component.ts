@@ -13,6 +13,7 @@ import { TextEditorModule } from 'ag-grid-community';
 import { NumberEditorModule } from 'ag-grid-community';
 import { PaginationModule } from 'ag-grid-community';
 import { json } from 'node:stream/consumers';
+import { RowApiModule } from 'ag-grid-community';
 
 
 ModuleRegistry.registerModules([
@@ -28,7 +29,8 @@ ModuleRegistry.registerModules([
   PivotModule,
   TextEditorModule,
   NumberEditorModule,
-  PaginationModule
+  PaginationModule,
+  RowApiModule
 ]);
 
 @Component({
@@ -74,25 +76,19 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     console.log('it is working')
     this.isBrowser = isPlatformBrowser(this.platformId);
-
-    if (this.isBrowser) {
-      const storedData = localStorage.getItem('rowData');
-      if (storedData) {
-        this.rowData = JSON.parse(storedData);
-        console.log('Loaded from localStorage:', this.rowData);
-      }
-    }
   }
 
-  onSave(){
-    
-    if(this.isEditMode){
-      console.log('Data updated:', this.rowData)
-    }else{
-      console.log('Data Saved:', this.rowData)
-      localStorage.setItem('rowData', JSON.stringify(this.rowData))
+  onSave() {
+    if (this.gridApi) {
+      const updatedRowData: any[] = [];
+  
+      this.gridApi.forEachNode((node: { data: any }) => {
+        updatedRowData.push(node.data);
+      });
+      console.log('saved Data:', updatedRowData)
+      console.log('Updated Data:', updatedRowData); 
+      this.rowData = updatedRowData;
     }
-
     this.isEditMode = !this.isEditMode;
   }
   
@@ -101,5 +97,4 @@ export class AppComponent implements OnInit{
     this.gridColumnApi = event.columnApi;
     console.log('Grid ready');
   }
-
 }
